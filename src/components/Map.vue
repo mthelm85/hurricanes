@@ -95,16 +95,14 @@ export default {
         "en-US",
         {
           month: "2-digit",
-          day: "2-digit",
-          year: "2-digit",
+          day: "2-digit"
         }
       );
       const maxDate = new Date(Math.max(...parsedDates)).toLocaleDateString(
         "en-US",
         {
           month: "2-digit",
-          day: "2-digit",
-          year: "2-digit",
+          day: "2-digit"
         }
       );
       return { min: minDate, max: maxDate };
