@@ -1,4 +1,31 @@
 <template>
+  <v-row style="margin-left: 0px;">
+    <v-col style="margin-top: -30px; z-index: 999;">
+      <svg height="40px" width="100%">
+        <text
+          v-for="(n, i) in generateRange(20, 100, 8)"
+          :key="`t${i}`"
+          :x ="i * 30 + 2.5"
+          y="15"
+          fill="white"
+          text-anchor="start"
+          font-size="12px"
+        >
+        {{  Math.round(n)  }}{{ n == 100 ? '+' : '' }}
+        </text>
+        <text fill="white" font-size="12px" :x="9 * 27" y="15">mph</text>
+        <rect
+          v-for="(n, i) in generateRange(20, 100, 80)"
+          :key="i"
+          width="3px"
+          height="20px"
+          :fill="getColor(n)"
+          :x="i * 3"
+          y="20">
+        </rect>
+      </svg>
+    </v-col>
+  </v-row>
   <div ref="map" class="map-container"></div>
 </template>
 
@@ -16,14 +43,14 @@ import { LineString } from "ol/geom";
 import { click } from "ol/events/condition.js";
 import Select from "ol/interaction/Select.js";
 import hurdat from "@/assets/hurdat.json";
-import { scaleQuantize } from "d3-scale";
-import { schemeRdYlBu } from "d3-scale-chromatic";
+import { scaleLinear } from "d3-scale";
+import { interpolateOranges } from "d3-scale-chromatic";
 
 useGeographic();
 
 export default {
   name: "OpenLayersMap",
-
+  emits: ["select", "noSelect"],
   props: {
     year: Number,
   },
@@ -51,17 +78,15 @@ export default {
       });
     },
 
+    generateRange(start, end, length) {
+      const step = (end - start) / (length - 1);
+      return Array.from({ length }, (_, i) => start + i * step);
+    },
+
     getColor(maxWind) {
-      return scaleQuantize()
-        .domain([30, 96])
-        .range([
-          "#c4c4c4",
-          "#ffda05",
-          "#ff9900",
-          "#ff5900",
-          "#ff2a00",
-          "#ff006f",
-        ])(maxWind);
+      return scaleLinear()
+        .domain([20, 40, 100])
+        .range(["lightgreen", "yellow", "red"])(maxWind);
     },
 
     getMinMaxDates(dates) {
@@ -236,6 +261,8 @@ export default {
 
 <style scoped>
 .map-container {
-  height: 85%;
+  height: 80%;
+  margin-left: 12px;
+  margin-right: 12px;
 }
 </style>
