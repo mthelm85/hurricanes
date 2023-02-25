@@ -5,7 +5,7 @@
         <v-col style="margin: 40px 10px -35px 5px">
           <v-slider
             v-model="yr"
-            :min="1851"
+            :min="1954"
             :max="2021"
             :step="1"
             thumb-label="always"
@@ -47,7 +47,7 @@ export default {
 
   data() {
     return {
-      yr: 1936,
+      yr: 1987,
       name: "",
       dateRange: "",
       maxStrength: "",
